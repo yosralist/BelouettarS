@@ -1,21 +1,12 @@
+import Header from '../components/Header'
+import { Globe } from 'lucide-react'
 import {
   Card,
   Container,
-  PrimaryButton,
   SecondaryButton,
-  Section,
   GradientButton,
   GradientSubmitButton,
 } from '../components/ui'
-
-function Logo(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden {...props}>
-      <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8Z" />
-      <circle cx="12" cy="12" r="3" fill="currentColor" />
-    </svg>
-  )
-}
 
 function CheckItem({ title, desc }: { title: string; desc?: string }) {
   return (
@@ -45,11 +36,7 @@ function SectionHeader({ eyebrow, title, subtitle }: { eyebrow?: string; title?:
   return (
     <div className="max-w-4xl mb-10">
       {eyebrow && <p className="text-base tracking-widest uppercase text-slate-500 mb-4">{eyebrow}</p>}
-      {title && (
-        <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-4">
-          {title}
-        </h2>
-      )}
+      {title && <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-4">{title}</h2>}
       {subtitle && <p className="text-xl text-slate-700">{subtitle}</p>}
     </div>
   )
@@ -58,42 +45,21 @@ function SectionHeader({ eyebrow, title, subtitle }: { eyebrow?: string; title?:
 export default function Page() {
   return (
     <div className="min-h-screen bg-white text-slate-800">
-      {/* Navbar */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-200">
-        <Container className="flex h-16 items-center justify-between">
-          <a href="#home" className="flex items-center gap-2 font-semibold text-lg">
-            <Logo className="h-7 w-7 text-primary" />
-            <span>Data & Decisions</span>
-          </a>
-          <nav className="hidden sm:flex items-center gap-6 text-base">
-            <a href="#services" className="hover:text-primary">Services</a>
-            <a href="#dpp" className="hover:text-primary">Digital Product Passport</a>
-            <a href="#expertise" className="hover:text-primary">Expertise</a>
-            <a href="#contact" className="hover:text-primary">Contact</a>
-          </nav>
-          <div className="hidden sm:block">
-            <GradientButton href="#contact">Get in touch</GradientButton>
-          </div>
-          <details className="sm:hidden">
-            <summary className="list-none cursor-pointer rounded-xl border border-slate-200 px-3 py-2 text-base">Menu</summary>
-            <div className="mt-2 space-y-2 rounded-xl border border-slate-200 p-3 bg-white">
-              <a href="#services" className="block text-base">Services</a>
-              <a href="#dpp" className="block text-base">Digital Product Passport</a>
-              <a href="#expertise" className="block text-base">Expertise</a>
-              <a href="#contact" className="block text-base">Contact</a>
-              <GradientButton href="#contact">Get in touch</GradientButton>
-            </div>
-          </details>
-        </Container>
-      </header>
+      <Header />
+      {/* spacer below fixed header */}
+      <div className="h-16" />
 
-      {/* Hero */}
-      <section id="home" className="relative overflow-hidden bg-white">
-        {/* thin separators */}
-        <div className="absolute inset-x-0 top-0 h-px bg-slate-200" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-slate-200" />
+      {/* Hero with gradient blobs (first-version style) */}
+      <section id="home" className="relative overflow-hidden">
+        {/* soft gradient base */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-sky-100 via-white to-indigo-50" />
+        {/* subtle grid overlay */}
+        <div className="absolute inset-0 -z-10 bg-grid bg-[size:22px_22px]" />
+        {/* animated color blobs */}
+        <div className="pointer-events-none absolute -top-28 -right-24 h-96 w-96 rounded-full bg-primary/30 blur-3xl animate-blob" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-sky-300/30 blur-3xl animate-blob animation-delay-2000" />
 
-        <Container className="py-20 sm:py-28 lg:py-36">
+        <Container className="py-20 sm:py-28 lg:py-36 relative z-10">
           <div className="max-w-4xl">
             <Badge>European leadership • End-to-end value chain</Badge>
             <h1 className="mt-4 text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight">
@@ -105,19 +71,25 @@ export default function Page() {
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <GradientButton href="#contact" className="text-lg">Get in touch</GradientButton>
-              <SecondaryButton href="#services" className="text-lg">Explore services</SecondaryButton>
+              <a
+                href="#services"
+                className="inline-flex items-center gap-2 rounded-2xl border border-slate-300 bg-white/70 px-6 py-3 text-lg font-medium hover:bg-slate-50"
+              >
+                Explore services
+              </a>
             </div>
 
+            {/* Stats */}
             <ul className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base">
-              <li className="rounded-xl border border-slate-200 p-5 bg-white hover:-translate-y-0.5 transition">
+              <li className="rounded-xl border p-5 bg-white/80 backdrop-blur border-slate-200 hover:-translate-y-0.5 transition">
                 <p className="font-bold text-lg">+5 years</p>
                 <p className="text-slate-700 text-base">experience in digitalisation</p>
               </li>
-              <li className="rounded-xl border border-slate-200 p-5 bg-white hover:-translate-y-0.5 transition">
+              <li className="rounded-xl border p-5 bg-white/80 backdrop-blur border-slate-200 hover:-translate-y-0.5 transition">
                 <p className="font-bold text-lg">Full lifecycle</p>
                 <p className="text-slate-700 text-base">materials → processes → market</p>
               </li>
-              <li className="rounded-xl border border-slate-200 p-5 bg-white hover:-translate-y-0.5 transition">
+              <li className="rounded-xl border p-5 bg-white/80 backdrop-blur border-slate-200 hover:-translate-y-0.5 transition">
                 <p className="font-bold text-lg">EU focus</p>
                 <p className="text-slate-700 text-base">DPP & sustainability readiness</p>
               </li>
@@ -126,7 +98,7 @@ export default function Page() {
         </Container>
       </section>
 
-      {/* Logos */}
+      {/* Logos band */}
       <section className="bg-slate-50 border-y border-slate-200">
         <Container className="py-10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 opacity-90">
@@ -254,7 +226,6 @@ export default function Page() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="border-slate-200">
             <h3 className="text-2xl font-bold mb-4">Send a message</h3>
-            {/* Replace Formspree action with your endpoint */}
             <form action="https://formspree.io/f/your_form_id" method="POST" className="space-y-4">
               <div>
                 <label className="block text-base font-medium">Name</label>
@@ -292,22 +263,22 @@ export default function Page() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 py-12">
-        <Container className="flex flex-col sm:flex-row items-center justify-between gap-4 text-base">
+        <div className="container flex flex-col sm:flex-row items-center justify-between gap-4 text-base">
           <div className="flex items-center gap-2">
-            <Logo className="h-6 w-6 text-primary" />
+            <Globe className="h-6 w-6 text-primary" aria-hidden />
             <span>© {new Date().getFullYear()} Data & Decisions</span>
           </div>
           <div className="flex items-center gap-5">
             <a href="#" className="hover:underline">Privacy</a>
             <a href="#" className="hover:underline">Imprint</a>
           </div>
-        </Container>
+        </div>
       </footer>
     </div>
   )
 }
 
-/** Helper: alternating section bands with clear separation */
+/** alternating section band helper */
 function SectionBand({
   id,
   bg,
@@ -319,13 +290,8 @@ function SectionBand({
 }) {
   const isSlate = bg === 'slate'
   return (
-    <section
-      id={id}
-      className={`${isSlate ? 'bg-slate-50' : 'bg-white'} border-t border-b border-slate-200`}
-    >
-      <Container className="py-16 sm:py-20 lg:py-24">
-        {children}
-      </Container>
+    <section id={id} className={`${isSlate ? 'bg-slate-50' : 'bg-white'} border-t border-b border-slate-200`}>
+      <div className="container py-16 sm:py-20 lg:py-24">{children}</div>
     </section>
   )
 }
