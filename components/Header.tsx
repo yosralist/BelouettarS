@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Globe } from "lucide-react";
+import Image from "next/image";
 
-const HEADER_H = 64; // header height in px (matches h-16)
+const HEADER_H = 96; // Increased height for better logo visibility
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const close = () => setOpen(false);
 
-    // Prevent background scroll when menu is open
     useEffect(() => {
         if (!open) return;
         const prev = document.body.style.overflow;
@@ -20,43 +19,25 @@ export default function Header() {
         };
     }, [open]);
 
-    // Drawer + overlay rendered in a portal (avoids clipping)
     const portal =
         typeof document !== "undefined" && open
             ? createPortal(
                 <>
-                    {/* Overlay */}
                     <button
                         aria-label="Close menu"
                         onClick={close}
-                        className="fixed inset-0 z-[1000] bg-black/35 backdrop-blur-sm"
+                        className="fixed inset-0 z-[1000] bg-black/20 backdrop-blur-sm"
                     />
-                    {/* Full-screen drawer below the header */}
                     <nav
-                        className="fixed left-0 right-0 z-[1001] bg-white"
+                        className="fixed left-0 right-0 z-[1001] bg-white border-b border-slate-200"
                         style={{ top: HEADER_H, height: `calc(100dvh - ${HEADER_H}px)` }}
                         aria-label="Mobile navigation"
                     >
-                        <div className="container py-4 flex flex-col gap-2 overflow-auto">
-                            <NavLink href="#services" onClick={close}>Services</NavLink>
-                            <NavLink href="#dpp" onClick={close}>Digital Product Passport</NavLink>
-                            <NavLink href="#expertise" onClick={close}>Expertise</NavLink>
-                            <NavLink href="#contact" onClick={close}>Contact</NavLink>
-
-                            <a
-                                href="#contact"
-                                onClick={close}
-                                className="mt-3 inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 font-medium text-white shadow-sm hover:opacity-95"
-                            >
-                                Get in touch
-                            </a>
-
-                            <button
-                                onClick={close}
-                                className="mt-3 inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 px-5 py-3 font-medium hover:bg-slate-50"
-                            >
-                                Close
-                            </button>
+                        <div className="px-6 py-8 flex flex-col gap-1">
+                            <MobileNavLink href="/" onClick={close}>Home</MobileNavLink>
+                            <MobileNavLink href="/about" onClick={close}>About</MobileNavLink>
+                            <MobileNavLink href="/services" onClick={close}>Services</MobileNavLink>
+                            <MobileNavLink href="/contact" onClick={close}>Contact</MobileNavLink>
                         </div>
                     </nav>
                 </>,
@@ -65,51 +46,62 @@ export default function Header() {
             : null;
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-[1002] bg-white/90 backdrop-blur border-b border-slate-200">
-            <div className="container h-16 flex items-center justify-between">
-                {/* Logo + brand */}
-                <a href="#home" className="flex items-center gap-2 font-semibold text-lg">
-                    <Globe className="h-7 w-7 text-primary" aria-hidden />
-                    <span>Data & Decisions</span>
-                </a>
+        <header className="fixed top-0 left-0 right-0 z-[1002] bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-24">
 
-                {/* Desktop nav */}
-                <nav className="hidden sm:flex items-center gap-6 text-base">
-                    <a href="#services" className="hover:text-primary">Services</a>
-                    <a href="#dpp" className="hover:text-primary">Digital Product Passport</a>
-                    <a href="#expertise" className="hover:text-primary">Expertise</a>
-                    <a href="#contact" className="hover:text-primary">Contact</a>
-                </nav>
+                    {/* Logo - Left Side */}
+                    <div className="flex-shrink-0">
+                        <a href="#home" className="block py-2">
+                            <Image
+                                src="/cropped-Logo-Data-Decision-596x184.png"
+                                alt="Data & Decisions"
+                                width={280}
+                                height={86}
+                                className="h-16 w-auto object-contain"
+                                priority
+                                quality={95}
+                            />
+                        </a>
+                    </div>
 
-                {/* Desktop CTA */}
-                <a href="#contact" className="hidden sm:inline-flex items-center gap-2 rounded-2xl bg-primary px-5 py-3 font-medium text-white shadow-sm hover:opacity-95">
-                    Get in touch
-                </a>
+                    {/* Desktop Navigation - Right Side */}
+                    <nav className="hidden md:flex items-center space-x-8">
+                        <a href="/" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">
+                            Home
+                        </a>
+                        <a href="/about" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">
+                            About
+                        </a>
+                        <a href="/services" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">
+                            Services
+                        </a>
+                        <a href="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md font-medium transition-colors">
+                            Contact
+                        </a>
+                    </nav>
 
-                {/* Mobile toggle */}
-                <button
-                    type="button"
-                    onClick={() => setOpen(true)}
-                    className="sm:hidden inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-base"
-                    aria-haspopup="dialog"
-                    aria-expanded={open}
-                >
-                    <svg viewBox="0 0 24 24" className="h-5 w-5">
-                        <path fill="currentColor" d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
-                    </svg>
-                    Menu
-                </button>
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="md:hidden p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                        aria-expanded={open}
+                    >
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-
             {portal}
         </header>
     );
 }
 
-function NavLink({
+function MobileNavLink({
     href,
     onClick,
-    children,
+    children
 }: {
     href: string;
     onClick: () => void;
@@ -119,7 +111,7 @@ function NavLink({
         <a
             href={href}
             onClick={onClick}
-            className="block rounded-md px-3 py-3 text-base hover:bg-slate-50"
+            className="block px-3 py-3 text-lg font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-md"
         >
             {children}
         </a>
