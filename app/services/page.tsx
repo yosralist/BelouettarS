@@ -132,11 +132,11 @@ export default function ServicesPage() {
                         {mainServices.map((service, index) => (
                             <div key={index} className="bg-white border border-slate-200 rounded-xl p-8 hover:shadow-lg transition-shadow group">
                                 <div className="flex items-start gap-6">
-                                    <div className="text-[#2da5e5] text-3xl font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
+                                    <div className="text-[#e57e1e] text-3xl font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
                                         {service.number}
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-[#2da5e5] transition-colors">
+                                        <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-[#e57e1e] transition-colors">
                                             {service.title}
                                         </h3>
                                         <p className="text-slate-600 leading-relaxed">
@@ -196,7 +196,7 @@ export default function ServicesPage() {
                         Let's discuss how our comprehensive services can help your organisation achieve its most ambitious goals
                     </p>
                     <a
-                        href="#contact"
+                        href="/contact"
                         className="inline-block bg-white text-[#2da5e5] px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
                     >
                         Start Your Journey Today

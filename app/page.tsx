@@ -1,6 +1,7 @@
 "use client";
 import { Globe } from 'lucide-react'
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRef, useState } from 'react';
 
 interface ImageErrorState {
   [key: string]: boolean;
@@ -9,8 +10,8 @@ interface ImageErrorState {
 function CheckItem({ title, desc }: { title: string; desc?: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span aria-hidden className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#2da5e5]/15">
-        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-[#2da5e5]">
+      <span aria-hidden className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#e57e1e]/15">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-[#e57e1e]">
           <path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
         </svg>
       </span>
@@ -67,7 +68,16 @@ function Container({ children, className = "" }: { children: React.ReactNode; cl
 
 export default function Page() {
   const [imageErrors, setImageErrors] = useState<ImageErrorState>({});
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const handlePlay = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      void videoRef.current.play();
+    }
+    setIsPlaying(true);
+  };
   const handleImageError = (professorKey: string) => {
     setImageErrors(prev => ({ ...prev, [professorKey]: true }));
   };
@@ -118,7 +128,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white text-slate-800">
       {/* spacer below fixed header */}
-      <div className="h-18" />
+      <div className="h-24" />
 
       {/* Hero with gradient blobs */}
       <section id="home" className="relative overflow-hidden">
@@ -127,7 +137,7 @@ export default function Page() {
         {/* subtle grid overlay */}
         <div className="absolute inset-0 -z-10 bg-grid bg-[size:22px_22px]" />
         {/* animated color blobs */}
-        <div className="pointer-events-none absolute -top-28 -right-24 h-96 w-96 rounded-full bg-[#2da5e5]/30 blur-3xl animate-blob" />
+        <div className="pointer-events-none absolute -top-28 -right-24 h-96 w-96 rounded-full bg-[#e57e1e]/30 blur-3xl animate-blob" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#2da5e5]/20 blur-3xl animate-blob animation-delay-2000" />
 
         <Container className="py-20 sm:py-28 lg:py-36 relative z-10">
@@ -148,7 +158,7 @@ export default function Page() {
                 Get in touch
               </a>
               <a
-                href="#services"
+                href="/services"
                 className="inline-flex items-center gap-2 rounded-2xl border border-slate-300 bg-white/70 px-6 py-3 text-lg font-medium hover:bg-slate-50"
               >
                 Explore services
@@ -189,7 +199,7 @@ export default function Page() {
           {/* Professor Heng HU */}
           <Card className="hover:-translate-y-0.5 transition border-slate-200 p-8 flex flex-col">
             <div className="mb-6">
-              <svg className="h-8 w-8 text-[#2da5e5]/30" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
+              <svg className="h-8 w-8 text-[#e57e1e]/30" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
                 <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
               </svg>
             </div>
@@ -253,14 +263,89 @@ export default function Page() {
       </SectionBand>
 
       {/* Video Section */}
-      <section className="bg-white py-16">
+      <section className="relative py-20 bg-gradient-to-b from-white via-orange-50/30 to-white">
+        {/* subtle decorative blur */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-[-80px] h-64 w-64 -translate-x-1/2 rounded-full bg-[#e57e1e]/10 blur-3xl" />
+        </div>
+
         <Container>
-          <h2 className="text-3xl font-bold text-center mb-8">Watch Our Video</h2>
-          <div className="flex justify-center">
-            <video controls className="max-w-full h-auto rounded-lg shadow-lg">
-              <source src="/Datandecisions.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Watch Our Video</h2>
+            <p className="mt-3 text-slate-600">
+              See how we turn complex data into clear, actionable decisions.
+            </p>
+          </div>
+
+          {/* video card */}
+          <div className="mx-auto mt-10 max-w-5xl">
+            <div
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+              role="region"
+              aria-label="Introductory video"
+            >
+              {/* 16:9 wrapper */}
+              <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <video
+                  ref={videoRef}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  controls
+                  preload="metadata"
+                  poster="/video-poster.png"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                >
+                  <source src="/Datandecisions.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+
+                {/* Play overlay (click to play) */}
+                {!isPlaying && (
+                  <button
+                    onClick={handlePlay}
+                    className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] transition-opacity group-hover:bg-black/25"
+                    aria-label="Play video"
+                  >
+                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/95 shadow-lg transition-transform group-hover:scale-105">
+                      <svg
+                        className="h-7 w-7 text-[#e57e1e]"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                  </button>
+                )}
+
+                {/* subtle top gloss */}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/40 to-transparent" />
+              </div>
+
+              {/* bottom meta */}
+              <div className="flex flex-col gap-3 border-t border-slate-200 bg-white/70 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-sm text-slate-600">
+                  2 min overview • Data strategy, analytics & innovation
+                </div>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href="/services"
+                    className="text-sm font-semibold text-[#e57e1e] hover:underline"
+                  >
+                    Explore our services →
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm
+                             border border-[#e57e1e] text-[#e57e1e]
+                             transition-colors hover:bg-[#e57e1e] hover:text-white"
+                  >
+                    Talk to us
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
@@ -348,24 +433,24 @@ export default function Page() {
             </div>
             <div className="space-y-4 mb-8">
               <div className="flex items-start gap-3">
-                <span className="inline-block w-2 h-2 bg-[#2da5e5] rounded-full mt-3 flex-shrink-0"></span>
+                <span className="inline-block w-2 h-2 bg-[#e57e1e] rounded-full mt-3 flex-shrink-0"></span>
                 <p className="text-lg text-slate-700">DPP architecture blueprint (diagrams + data dictionary)</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="inline-block w-2 h-2 bg-[#2da5e5] rounded-full mt-3 flex-shrink-0"></span>
+                <span className="inline-block w-2 h-2 bg-[#e57e1e] rounded-full mt-3 flex-shrink-0"></span>
                 <p className="text-lg text-slate-700">Integration spec with ERP/PLM/MES and suppliers</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="inline-block w-2 h-2 bg-[#2da5e5] rounded-full mt-3 flex-shrink-0"></span>
+                <span className="inline-block w-2 h-2 bg-[#e57e1e] rounded-full mt-3 flex-shrink-0"></span>
                 <p className="text-lg text-slate-700">Compliance checklist and rollout plan</p>
               </div>
               <div className="flex items-start gap-3">
-                <span className="inline-block w-2 h-2 bg-[#2da5e5] rounded-full mt-3 flex-shrink-0"></span>
+                <span className="inline-block w-2 h-2 bg-[#e57e1e] rounded-full mt-3 flex-shrink-0"></span>
                 <p className="text-lg text-slate-700">Demo dashboard for passport issuance & verification</p>
               </div>
             </div>
             <a
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#2da5e5] to-[#2590cc] px-8 py-4 text-lg font-semibold text-white hover:from-[#2590cc] hover:to-[#1e88e5] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group"
             >
               <span>Discuss your DPP</span>
